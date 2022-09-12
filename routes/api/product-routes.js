@@ -67,7 +67,7 @@ router.post("/", (req, res) => {
     });
 });
 
-// update product - coded for us
+// update product
 router.put("/:id", (req, res) => {
   // update product data
   Product.update(req.body, {

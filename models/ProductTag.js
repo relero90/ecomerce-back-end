@@ -5,6 +5,7 @@ const Product = require("./Product");
 
 class ProductTag extends Model {}
 
+// through model for Product & Tag
 ProductTag.init(
   {
     // define columns
@@ -17,15 +18,15 @@ ProductTag.init(
     product_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: Product,
-        key: id,
+        model: "Product",
+        key: "id",
       },
     },
     tag_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: Tag,
-        key: id,
+        model: "Tag",
+        key: "id",
       },
     },
   },

@@ -13,14 +13,26 @@ router.get("/", async (req, res) => {
     });
     res.status(200).json(productData);
   } catch {
-    res.status(500).json("GET request failed.");
+    res.status(500).json({ message: "Failed to GET data." });
   }
 });
 
 // get one product
-router.get("/:id", (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+router.get("/:id", async (req, res) => {
+  try {
+    // find a single product by its `id`
+    const productMatch = await Product.findByPk(req.params.id, {
+      // be sure to include its associated Category and Tag data
+      include: [{ model: Category }, { model: Tag }],
+    });
+    if (!productMatch) {
+      res.status(404).json({ message: "No product found with that id." });
+    }
+    // return the matching product data
+    res.status(200).json(productMatch);
+  } catch {
+    res.status(500).json({ message: "Failed to GET data." });
+  }
 });
 
 // create new product

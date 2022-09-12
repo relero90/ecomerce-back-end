@@ -12,13 +12,26 @@ router.get("/", async (req, res) => {
     });
     res.status(200).json(categoryData);
   } catch {
-    res.status(500).json("GET request failed.");
+    res.status(500).json({ message: "Failed to GET data." });
   }
 });
 
-router.get("/:id", (req, res) => {
-  // find one category by its `id` value
-  // be sure to include its associated Products
+router.get("/:id", async (req, res) => {
+  try {
+    // find one category by its `id` value
+    const categoryMatch = await Category.findByPk(req.params.id, {
+      // be sure to include its associated Products
+      include: [{ model: Product }],
+    });
+    // if there is no matching category
+    if (!categoryMatch) {
+      res.status(404).json({ message: "No category found with that id." });
+    }
+    // return the matching category data
+    res.status(200).json(categoryMatch);
+  } catch {
+    res.status(500).json({ message: "Failed to GET data." });
+  }
 });
 
 router.post("/", (req, res) => {
